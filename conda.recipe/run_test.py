@@ -13,7 +13,7 @@ import slmgen
 
 
 def main():
-    binary, sample, annulus = slmgen.makeSLMPattern(pattern_only=False)
+    binary, sample, annulus = slmgen.linear_bessel_array(pattern_only=False)
     assert np.allclose(0.081422659413112178, binary.std())
     assert np.allclose(0.99332580566406248, binary.mean())
     assert np.allclose(263242524012.73526, sample.std())
@@ -21,7 +21,7 @@ def main():
     assert np.allclose(1080564.3878853747, annulus.std())
     assert np.allclose(14884.92777634431, annulus.mean())
 
-    binary, sample, annulus = slmgen.makeSLMPattern_hex(pattern_only=False)
+    binary, sample, annulus = slmgen.hex_lattice(pattern_only=False)
     assert np.allclose(0.14246046093792242, binary.std())
     assert np.allclose(0.97927551269531254, binary.mean())
     assert np.allclose(158283805034.7933, sample.std())

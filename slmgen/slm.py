@@ -34,7 +34,7 @@ def ronchi_ruling(width=1, slm_xpix=1280, slm_ypix=1024, orientation='horizontal
     return out
 
 
-def makeSLMPattern(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
+def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
                    n_beam='fill', crop=0.22, tilt=0, shift_x=0, shift_y=0,
                    mag=167.364, pixel=13.662, slm_xpix=1280, slm_ypix=1024,
                    fillchip=0.95, fudge=0.95, show=False, outdir=None,
@@ -197,7 +197,7 @@ def makeSLMPattern(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
     return slm_pattern_final, intensity_final, pupil_field
 
 
-def makeSLMPattern_hex(wave=0.488, pixel=13.665, mag=167.364,
+def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
                        shift_x=0, shift_y=0, NA_outer=0.6,
                        NA_ideal=0.55, NA_inner=0.505, tilt=0, field_sign=1,
                        slm_xpix=1280, slm_ypix=1024,
@@ -457,11 +457,11 @@ def makeSLMPattern_hex(wave=0.488, pixel=13.665, mag=167.364,
 if __name__ == '__main__':
     import time
     # now = time.time()
-    # a = makeSLMPattern(0.488, n_beam='fill', show=False, outdir='~/Desktop')
+    # a = linear_bessel_array(0.488, n_beam='fill', show=False, outdir='~/Desktop')
     # print("Time: {}".format(time.time()-now))
 
     now = time.time()
-    a, b, c = makeSLMPattern(0.488, n_beam='fill', show=True, pattern_only=False)
+    a, b, c = linear_bessel_array(0.488, n_beam='fill', show=True, pattern_only=False)
     print("Time: {}".format(time.time()-now))
 
     # plt.figure()

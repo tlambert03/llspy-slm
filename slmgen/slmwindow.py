@@ -64,9 +64,9 @@ class PatternPreviewThread(QtCore.QThread):
 
     def run(self):
         if self.mode == 'square':
-            output = _slm.makeSLMPattern(pattern_only=False, **self.params)
+            output = _slm.linear_bessel_array(pattern_only=False, **self.params)
         elif self.mode == 'hex':
-            output = _slm.makeSLMPattern_hex(pattern_only=False, **self.params)
+            output = _slm.hex_lattice(pattern_only=False, **self.params)
         elif self.mode == 'ronchi':
             width = self.params.get('width', 1)
             slm_xpix = self.params.get('slm_xpix', 1280)
@@ -90,9 +90,9 @@ class PatternWriteThread(QtCore.QRunnable):
     def run(self):
         logger.debug("Writing {} SLM pattern to {}".format(self.mode, self.path))
         if self.mode == 'square':
-            _slm.makeSLMPattern(outdir=self.path, pattern_only=True, **self.params)
+            _slm.linear_bessel_array(outdir=self.path, pattern_only=True, **self.params)
         elif self.mode == 'hex':
-            _slm.makeSLMPattern_hex(outdir=self.path, pattern_only=True, **self.params)
+            _slm.hex_lattice(outdir=self.path, pattern_only=True, **self.params)
         elif self.mode == 'ronchi':
             width = self.params.get('width', 1)
             slm_xpix = self.params.get('slm_xpix', 1280)
