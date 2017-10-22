@@ -124,7 +124,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         self.slmBinaryLabel = QtWidgets.QLabel(self)
         self.slmBinaryLabel.setBackgroundRole(QtGui.QPalette.Base)
         self.slmBinaryLabel.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
-        #self.slmBinaryLabel.setGeometry(QtCore.QRect(0, 0, 476, 150))
+        # self.slmBinaryLabel.setGeometry(QtCore.QRect(0, 0, 476, 150))
         self.slmBinaryLabel.setFixedWidth(476)
         self.slmBinaryLabel.setFixedHeight(150)
         # self.slmBinaryLabel.setScaledContents(True)
@@ -132,7 +132,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         self.sampleIntensityLabel = QtWidgets.QLabel(self)
         self.sampleIntensityLabel.setBackgroundRole(QtGui.QPalette.Base)
         self.sampleIntensityLabel.setSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
-        #self.sampleIntensityLabel.setGeometry(QtCore.QRect(0, 0, 476, 150))
+        # self.sampleIntensityLabel.setGeometry(QtCore.QRect(0, 0, 476, 150))
         self.sampleIntensityLabel.setFixedWidth(476)
         self.sampleIntensityLabel.setFixedHeight(150)
 
@@ -148,7 +148,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         self.lowerRightScroll.setWidget(self.sampleIntensityLabel)
 
         font = QtGui.QFont()
-        #font.setFamily("Helvetica")
+        # font.setFamily("Helvetica")
         font.setBold(True)
         font.setWeight(60)
 
@@ -763,18 +763,28 @@ def getAbsoluteResourcePath(relativePath):
     return path
 
 
+def test():
+    import time
+    import sys
+    APP = QtWidgets.QApplication([])
+    mainGUI = SLMdialog()
+    time.sleep(.1)
+    mainGUI.close()
+    sys.exit(0)
+
+
 def main():
     import sys
 
     APP = QtWidgets.QApplication(sys.argv)
 
     version = '0.1.0'
-    appicon = QtGui.QIcon(getAbsoluteResourcePath('slmgen_logo.png'))
+    appicon = QtGui.QIcon(getAbsoluteResourcePath('../img/slmgen_logo.png'))
     APP.setWindowIcon(appicon)
     # register icon with windows
     if sys.platform.startswith('win32'):
         import ctypes
-        myappid = 'llspy.LLSpySLMgen.' + version
+        myappid = 'llspy.slmgen.' + version
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
     main = SLMdialog()

@@ -1,0 +1,48 @@
+{% set name = "llspy-slm" %}
+{% set setupdata = load_setup_py_data() %}
+
+package:
+  name: {{ name }}
+  version: {{ setupdata['version'] }}
+
+source:
+  path: ..
+  #git_url: https://github.com/tlambert03/llspy-slm
+  #git_rev: 'master'
+
+build:
+  number: 0
+  string: 'py{{ PY_VER|replace(".", "") }}_{{ PKG_BUILDNUM }}'
+  script: python setup.py install --single-version-externally-managed --record record.txt
+  entry_points:
+    {% for key, list in setupdata['entry_points'].items() %}
+      {% for item in list %}
+    - {{item}}
+      {% endfor %}
+    {% endfor %}
+
+requirements:
+  build:
+    - python
+    - setuptools
+  run:
+    - python
+    - numpy
+    - scipy
+    - pillow
+    - numba
+    - pyqt
+
+test:
+  imports:
+    - slmgen
+  commands:
+    - which slmgen  # [unix]
+    - where slmgen  # [win]
+    - slmgen-test
+
+about:
+  home: {{ setupdata['url'] }}
+  license: {{ setupdata['license'] }}
+  license_file: LICENSE
+  summary: {{ setupdata['description'] }}

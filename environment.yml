@@ -1,0 +1,11 @@
+name: slmenv
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python
+  - numpy
+  - scipy
+  - pillow
+  - numba
+  - pyqt
