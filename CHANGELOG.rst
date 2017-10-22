@@ -1,6 +1,13 @@
 LLSpy Release History
 #####################
 
+`0.1.1`_
+========
+
+**Changed:**
+
+* renamed main funcs in slm.py
+
 `0.1.0`_
 ========
 
@@ -12,7 +19,6 @@ First release as independent package (independent from main LLSpy package)
 * Ronchi-ruling pattern generator added to SLMgen
 * Batch SLM pattern generation
 * Docs for SLM generator GUI
-* Docs for Registration
 * Option to dither SLM preview in SLM Pattern Generator
 * User-adjustable LUTs for SLM pattern previews
 
