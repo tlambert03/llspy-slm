@@ -59,7 +59,6 @@ setup(
     entry_points={
             'console_scripts': [
                 'slmgen = slmgen.slmwindow:main',
-                'slmgen-test = slmgen.slmwindow:test'
             ],
     },
 )

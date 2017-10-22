@@ -6,7 +6,7 @@ package:
   version: {{ setupdata['version'] }}
 
 source:
-  #path: ..
+  # path: ..
   git_url: https://github.com/tlambert03/llspy-slm
   git_rev: 'master'
 
@@ -39,7 +39,9 @@ test:
   commands:
     - which slmgen  # [unix]
     - where slmgen  # [win]
-    - slmgen-test
+
+# The script run_test.py will be run automatically if it is part of the
+# recipe
 
 about:
   home: {{ setupdata['url'] }}
