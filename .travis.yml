@@ -8,10 +8,6 @@ python:
 branches:
   only:
   - master
-  - travis
-
-before_install:
-  - echo "before install"
 
 install:
   - sudo apt-get update
@@ -23,7 +19,6 @@ install:
     fi
   - bash miniconda.sh -b -p $HOME/miniconda
   - export PATH="$HOME/miniconda/bin:$PATH"
-  - export PKG_NAME=llspy-slm
   - export USER=talley
   - export CONDA_BLD_PATH=~/conda-bld
 
@@ -47,7 +42,7 @@ after_success:
   - echo $TRAVIS_TEST_RESULT
 #  - conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $OUTPUT
 #  - ls $CONDA_BLD_PATH/*
-  - anaconda -t $CONDA_UPLOAD_TOKEN -v upload -all -u $USER --force -s "slm pattern generator for lattice light sheet microscopy" $OUTPUT
+  - anaconda -t $CONDA_UPLOAD_TOKEN -v upload --all -u $USER --force -s "slm pattern generator for lattice light sheet microscopy" $OUTPUT
 #  - anaconda upload -t $CONDA_UPLOAD_TOKEN -u $USER --force -s "slm pattern generator for lattice light sheet microscopy" $CONDA_BLD_PATH/win-64/*.tar.bz2
 #  - anaconda upload -t $CONDA_UPLOAD_TOKEN -u $USER --force -s "slm pattern generator for lattice light sheet microscopy" $CONDA_BLD_PATH/linux-64/*.tar.bz2
 #  - test $TRAVIS_BRANCH = "master" && bash conda.recipe/conda_upload.sh
