@@ -27,7 +27,7 @@ Copyright |copy| 2017 Talley Lambert, Harvard Medical School.
 **llspy-slm** is a simple python app for generating binary masks to drive the spatial light modulator (SLM) for Lattice Light Sheet microscopes. It can generate both *square lattices* and *hex lattices*, and includes the ability to automatically set various parameters such as wavelength dependent beam-spacing (fully manually control is also available).  Additionally, there is a batch square lattice feature that can be used to generate a large number of parameter permutations easily.
 
 
-.. image:: img/slmgen_screenshot.png
+.. image:: img/slmgen_gui.png
    :alt: LLSpy SLM Pattern Generator GUI
 
 
