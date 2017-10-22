@@ -8,6 +8,7 @@ python:
 branches:
   only:
   - master
+  - travis
 
 before_install:
   - echo "before install"
