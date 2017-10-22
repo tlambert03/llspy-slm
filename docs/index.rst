@@ -17,7 +17,7 @@ Copyright |copy| 2017 Talley Lambert, Harvard Medical School.
    :maxdepth: 2
    :caption: Table of Contents:
 
-   slm
+   gui
    api
 
 

@@ -1,4 +1,4 @@
-.. _slm:
+.. _gui:
 
 Pattern Generator GUI
 =====================
