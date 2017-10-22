@@ -6,9 +6,9 @@ package:
   version: {{ setupdata['version'] }}
 
 source:
-  path: ..
-  #git_url: https://github.com/tlambert03/llspy-slm
-  #git_rev: 'master'
+  #path: ..
+  git_url: https://github.com/tlambert03/llspy-slm
+  git_rev: 'master'
 
 build:
   number: 0
