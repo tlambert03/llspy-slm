@@ -747,7 +747,7 @@ def getAbsoluteResourcePath(relativePath):
         # If not running as a PyInstaller created binary, try to find the data file as
         # an installed Python egg
         try:
-            basePath = os.path.dirname(sys.modules['slmgen'].__file__)
+            basePath = os.path.dirname(sys.modules['slmgen'].__file__, os.pardir)
         except Exception:
             basePath = ''
 
@@ -779,7 +779,7 @@ def main():
     APP = QtWidgets.QApplication(sys.argv)
 
     version = '0.1.0'
-    appicon = QtGui.QIcon(getAbsoluteResourcePath('../img/slmgen_logo.png'))
+    appicon = QtGui.QIcon(getAbsoluteResourcePath('img/slmgen_logo.png'))
     APP.setWindowIcon(appicon)
     # register icon with windows
     if sys.platform.startswith('win32'):
