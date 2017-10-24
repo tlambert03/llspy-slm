@@ -1,6 +1,7 @@
 from __future__ import division
 
 import re
+import sys
 import numpy as np
 from . import slm as _slm
 from .luts import LUTs
@@ -114,6 +115,10 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         self.mode = 'square'
         self.dithered = False
         self.writeThreadpool = QtCore.QThreadPool()
+
+        # TODO: figure out why windows sucks at multithreading
+        if sys.platform.startswith('win'):
+            self.writeThreadpool.setMaxThreadCount(1)
 
         self.PatternPresetsCombo.addItems(self.PRESETS)
 
@@ -516,7 +521,6 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
             elif isinstance(params['spacing'], float) and params['spacing'] >= 6:
                 params['crop'] = 0.06
             logger.debug("SLM batch params: {}".format(params))
-
             worker = PatternWriteThread(path, params)
             self.writeThreadpool.start(worker)
         # TODO: disable the write button until the threadpool is done

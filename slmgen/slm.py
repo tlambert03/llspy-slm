@@ -104,7 +104,7 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
     if show:
         import matplotlib.pyplot as plt
         plt.figure()
-        plt.imshow(abs(slm_field_ideal*slm_field_ideal))
+        plt.imshow(np.abs(slm_field_ideal*slm_field_ideal))
         plt.title('Ideal coherent bessel light sheet intensity')
         plt.axis('image')
 
@@ -112,10 +112,10 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
     # interpolator = interp2d(x, x, slm_field_ideal)
     interpolator = RectBivariateSpline(x, y, slm_field_ideal)
     slm_pattern = interpolator(x_slm, y_slm)
-    slm_pattern *= abs(slm_pattern) > crop
-    slm_pattern = np.sign(slm_pattern + 0.001) * np.pi/2 + np.pi/2
-
-    # needed slightly higher cropping value for python
+    # slm_pattern *= np.abs(slm_pattern) > crop
+    slm_pattern[np.abs(slm_pattern) < crop] = 0
+    eps = np.finfo(float).eps
+    slm_pattern = np.sign(slm_pattern + eps) * np.pi/2 + np.pi/2
 
     # Account for rectangular aspect ratio of SLM and convert phase to binary
     low = int(np.floor((slm_xpix/2)-(slm_ypix/2)-1))
