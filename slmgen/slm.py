@@ -400,7 +400,7 @@ def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
     if outdir is not None:
         outdir = os.path.abspath(os.path.expanduser(outdir))
         if os.path.isdir(outdir):
-            namefmt = '{:.0f}_{}Hex_c{:.2f}_na{:.0f}-{:.0f}_naIdeal{:.0f}_y{:02d}_t{:0.3f}'
+            namefmt = '{:.0f}_{}Hex_c{:.2f}_na{:.0f}-{:.0f}_naIdeal{:.0f}_y{:02f}_t{:0.3f}'
             name = namefmt.format(wave*1000, bound, crop, 100*NA_outer, 100*NA_inner,
                 100*NA_ideal, shift_y, tilt)
             name = name.replace('.', 'p')
