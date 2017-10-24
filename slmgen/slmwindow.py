@@ -622,10 +622,12 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         else:
             try:
                 a = [float(x) for x in xshift.split(':')]
-                if len(a) > 1:
+                if len(a) == 1:
+                    xshifts = a
+                else:
                     a[1] += .000001  # include stop index
-                xshifts = np.arange(*a)
-                xshifts = sorted(list(set([round(y, 2) for y in xshifts if -100 < y < 100])))
+                    xshifts = np.arange(*a)
+                    xshifts = sorted(list(set([round(y, 2) for y in xshifts if -100 < y < 100])))
             except TypeError as e:
                 errors.append('X Shift Range not valid: {}'.format(e))
 
@@ -635,10 +637,12 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         else:
             try:
                 a = [float(y) for y in yshift.split(':')]
-                if len(a) > 1:
+                if len(a) == 1:
+                    yshifts = a
+                else:
                     a[1] += .000001  # include stop index
-                yshifts = np.arange(*a)
-                yshifts = sorted(list(set([round(y, 2) for y in yshifts if -100 < y < 100])))
+                    yshifts = np.arange(*a)
+                    yshifts = sorted(list(set([round(y, 2) for y in yshifts if -100 < y < 100])))
             except TypeError as e:
                 errors.append('Y Shift Range not valid: {}'.format(e))
 
@@ -648,10 +652,12 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         else:
             try:
                 a = [float(ti) for ti in tilt.split(':')]
-                if len(a) > 1:
+                if len(a) == 1:
+                    tilts = a
+                else:
                     a[1] += .000001  # include stop index
-                tilts = np.arange(*a)
-                tilts = sorted(list(set([round(ti, 2) for ti in tilts if -1.5 <= ti <= 1.5])))
+                    tilts = np.arange(*a)
+                    tilts = sorted(list(set([round(ti, 2) for ti in tilts if -1.5 <= ti <= 1.5])))
             except TypeError as e:
                 errors.append('Tilt Range not valid: {}'.format(e))
 
