@@ -7,6 +7,13 @@ LLSpy Release History
 **Changed:**
 
 * renamed main funcs in slm.py
+* increased crop precision in gui to 0.001
+
+**Fixed:**
+
+* on windows, the batch write function creates unpredictable output files due to weird windows multi-threading.  For now, restricting batch write to a single thread on windows... will make things slower than Mac or Linux.
+* Fix bug that that prevented writing Hex patterns to file
+* Fix bug when batch shift/tilt ranges have a single number <= 0
 
 `0.1.0`_
 ========
