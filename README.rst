@@ -47,10 +47,12 @@ Installation
     .. code:: bash
 
         > conda create -n slmenv
-        # for conda < 4.4.0
-        > activate slmenv  # or source activate slmenv on OS X / Linux
         # for conda ≥ 4.4.0
         > conda activate slmenv
+        # for conda < 4.4.0
+        > activate slmenv  
+        # or on OS X / Linux
+        > source activate slmenv
 
         > conda install -c talley -c conda-forge llspy-slm
 
@@ -61,8 +63,12 @@ Installation
     .. code:: bash
 
         # Launch Anaconda Prompt and type...
-        > activate slmenv  # Windows
-        $ source activate slmenv  # OS X or Linux
+        # for conda ≥ 4.4.0
+        > conda activate slmenv
+        # for conda < 4.4.0
+        > activate slmenv  
+        # or on OS X / Linux
+        > source activate slmenv
 
         # launch the gui
         > slmgen
