@@ -518,6 +518,8 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
                 'shift_x': combo[4],
                 'shift_y': combo[5],
                 'tilt': round(combo[6], 2),
+                'slm_xpix': self.slm_xpix_spin.value(),
+                'slm_ypix': self.slm_ypix_spin.value(),
             }
             # for now, enforce "reasonable" cropping for single and 3-beam patterns
             if nbeam == 1:
