@@ -3,7 +3,7 @@
 
 package:
   name: {{ name }}
-  version: {{ setupdata['version'] }}
+  version: {{ setupdata.get('version') }}
 
 source:
   # path: ..
@@ -15,7 +15,7 @@ build:
   string: 'py{{ PY_VER|replace(".", "") }}_{{ PKG_BUILDNUM }}'
   script: python setup.py install --single-version-externally-managed --record record.txt
   entry_points:
-    {% for key, list in setupdata['entry_points'].items() %}
+    {% for key, list in setupdata.get('entry_points').items() %}
       {% for item in list %}
     - {{item}}
       {% endfor %}
@@ -44,7 +44,7 @@ test:
 # recipe
 
 about:
-  home: {{ setupdata['url'] }}
-  license: {{ setupdata['license'] }}
+  home: {{ setupdata.get('url') }}
+  license: {{ setupdata.get('license') }}
   license_file: LICENSE
-  summary: {{ setupdata['description'] }}
+  summary: {{ setupdata.get('description') }}
