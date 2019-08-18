@@ -35,7 +35,7 @@ Requirements
 ============
 
 * Compatible with Windows (tested on 7/10), Mac or Linux (tested on Ubuntu 16.04)
-* Python 3.6 (recommended), 3.5, or 2.7
+* Python 3.7, 3.6, 3.5, or 2.7
 
 Installation
 ============
