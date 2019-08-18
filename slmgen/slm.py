@@ -218,7 +218,7 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
             A = np.exp(1j * f * ii) + np.exp(-1j * f * ii)
             return v + np.multiply(pupil_mask, A)
     else:
-        @jit(nopython=True, cache=True)
+        @jit(nopython=True)
         def calc(v, ii):
             A = np.exp(1j * f * ii) + np.exp(-1j * f * ii)
             return v + np.multiply(pupil_mask, A)

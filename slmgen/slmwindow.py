@@ -345,7 +345,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         dh, dw = data.shape
         w = self.sampleIntensityLabel.width()/2
         h = self.sampleIntensityLabel.height()/2
-        data = data[int(dh/2-h):int(dh/2+h), int(dw/2-w):int(dw/2+w)] * 1
+        data = (data[int(dh/2-h):int(dh/2+h), int(dw/2-w):int(dw/2+w)] * 1).copy()
         QI = QtGui.QImage(
             data, data.shape[1], data.shape[0], QtGui.QImage.Format_Indexed8)
         QI.setColorTable(QLuts[self.sampleLUTCombo.currentText().lower()])
