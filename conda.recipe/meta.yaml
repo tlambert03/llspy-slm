@@ -15,7 +15,7 @@ build:
   string: 'py{{ PY_VER|replace(".", "") }}_{{ PKG_BUILDNUM }}'
   script: python setup.py install --single-version-externally-managed --record record.txt
   entry_points:
-    {% for key, list in setupdata['entry_points'].items() %}
+    {% for key, list in setupdata.get('entry_points').items() %}
       {% for item in list %}
     - {{item}}
       {% endfor %}

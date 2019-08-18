@@ -57,8 +57,8 @@ setup(
         'pyqt5',
     ],
     entry_points={
-            'console_scripts': [
-                'slmgen = slmgen.slmwindow:main',
-            ],
+        'console_scripts': [
+            'slmgen = slmgen.slmwindow:main',
+        ],
     },
 )
