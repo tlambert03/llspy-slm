@@ -73,7 +73,7 @@ class PatternWriteThread(QtCore.QRunnable):
         # self.finished.connect(self.cleanup)
 
     def run(self):
-        logger.debug("Writing {} SLM pattern to {}".format(self.mode, self.path))
+        logger.info("Writing {} SLM pattern to {}".format(self.mode, self.path))
         if self.mode == "square":
             _slm.linear_bessel_array(outdir=self.path, pattern_only=True, **self.params)
         elif self.mode == "hex":
@@ -531,11 +531,13 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
             if not path:
                 return
 
+        _params = self.getparams()
         self.threadpool = QtCore.QThreadPool()
         for combo in combos:
             nbeam = combo[3][0]
             nbeam = int((nbeam - 1) / 2) + 1 if not isinstance(nbeam, str) else nbeam
-            params = {
+            params = _params.copy()
+            params.update({
                 "wave": combo[0],
                 "NA_inner": combo[1],
                 "NA_outer": combo[2],
@@ -544,9 +546,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
                 "shift_x": combo[4],
                 "shift_y": combo[5],
                 "tilt": round(combo[6], 2),
-                "slm_xpix": self.slm_xpix_spin.value(),
-                "slm_ypix": self.slm_ypix_spin.value(),
-            }
+            })
             # for now, enforce "reasonable" cropping for single and 3-beam patterns
             if nbeam == 1:
                 params["crop"] = 0.0291
