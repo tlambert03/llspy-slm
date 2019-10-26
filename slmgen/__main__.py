@@ -1,15 +1,19 @@
 try:
     from .slmwindow import main
-except ImportError:
-    import os
+except Exception as e:
     import sys
-    thisDirectory = os.path.dirname(os.path.abspath(__file__))
-    sys.path.append(os.path.join(thisDirectory, os.pardir))
-    from slmgen.slmwindow import main
 
-if __name__ == '__main__':
+    if "QtError" in e.__class__.__name__:
+        print(f"{e}...")
+        print("To use the GUI, please install either pyqt or pyside2.")
+        print("for example:\n\n  $ conda install pyqt\n")
+    sys.exit()
+
+
+if __name__ == "__main__":
 
     import logging
+
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
 

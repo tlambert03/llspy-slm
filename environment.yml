@@ -8,4 +8,4 @@ dependencies:
   - scipy
   - pillow
   - numba
-  - pyqt
+  - qtpy

@@ -54,7 +54,7 @@ setup(
         'scipy',
         'numba',
         'pillow',
-        'pyqt5',
+        'qtpy',
     ],
     entry_points={
         'console_scripts': [

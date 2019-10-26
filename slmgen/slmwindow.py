@@ -5,9 +5,10 @@ import sys
 import numpy as np
 from . import slm as _slm
 from .luts import LUTs
+
+from qtpy import QtWidgets, QtCore, QtGui, API
 from .slm_pattern_dialog import Ui_Dialog
 
-from PyQt5 import QtWidgets, QtCore, QtGui
 import logging
 
 logger = logging.getLogger(__name__)
@@ -39,7 +40,7 @@ def make8bit(data, p):
 
 
 class PatternPreviewThread(QtCore.QThread):
-    finished = QtCore.pyqtSignal(tuple)
+    finished = QtCore.Signal(tuple)
 
     def __init__(self, params, mode="square"):
         QtCore.QThread.__init__(self)
@@ -64,7 +65,10 @@ class PatternPreviewThread(QtCore.QThread):
 
 class PatternWriteThread(QtCore.QRunnable):
     def __init__(self, path, params, mode="square"):
-        QtCore.QThread.__init__(self)
+        if 'pyqt' in API:
+            QtCore.QThread.__init__(self)
+        else:
+            super().__init__(self)
         self.params = params
         self.path = path
         if mode not in ("square", "hex", "ronchi"):
@@ -194,7 +198,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
         self.PatternPresetsCombo.currentTextChanged.connect(self.updatePreset)
         self.SLMmodelCombo.currentTextChanged.connect(self.setSLM)
         self.SLMmodelCombo.clear()
-        self.SLMmodelCombo.addItems(SLMs.keys())
+        self.SLMmodelCombo.addItems(list(SLMs.keys()))
         self.setSLM("SXGA-3DM")
         self.PatternPresetsCombo.setCurrentText("Square Lattice, Fill Chip")
 
@@ -753,7 +757,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
                 )
             return combos
 
-    @QtCore.pyqtSlot(str, str, str, str)
+    @QtCore.Slot(str, str, str, str)
     def show_error_window(self, errMsg, title=None, info=None, detail=None):
         self.msgBox = QtWidgets.QMessageBox()
         if title is None or title == "":
@@ -797,7 +801,7 @@ class ExceptionHandler(QtCore.QObject):
     """General class to handle all raise exception errors in the GUI"""
 
     # error message, title, more info, detail (e.g. traceback)
-    errorMessage = QtCore.pyqtSignal(str, str, str, str)
+    errorMessage = QtCore.Signal(str, str, str, str)
 
     def __init__(self):
         super(ExceptionHandler, self).__init__()
