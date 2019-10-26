@@ -24,7 +24,13 @@ Copyright |copy| 2017 Talley Lambert, Harvard Medical School.
 
 |
 
-**llspy-slm** is a simple python app for generating binary masks to drive the spatial light modulator (SLM) on Lattice Light Sheet microscopes. It can generate both *square lattices* and *hex lattices*, and includes the ability to automatically set various parameters such as wavelength dependent beam-spacing (fully manually control is also available).  Additionally, there is a batch square lattice feature that can be used to generate a large number of parameter permutations easily.
+**llspy-slm** is a simple python app for generating binary masks to drive
+the spatial light modulator (SLM) on Lattice Light Sheet microscopes.
+It can generate both *square lattices* and *hex lattices*, and includes
+the ability to automatically set various parameters such as wavelength
+dependent beam-spacing (fully manually control is also available).
+Additionally, there is a batch square lattice feature that can be used
+to generate a large number of parameter permutations easily.
 
 See complete usage notes in the `documentation <http://llspy-slm.readthedocs.io/>`_.
 
@@ -34,7 +40,8 @@ See complete usage notes in the `documentation <http://llspy-slm.readthedocs.io/
 Requirements
 ============
 
-* Compatible with Windows (tested on 7/10), Mac or Linux (tested on Ubuntu 16.04)
+* Compatible with Windows (tested on 7/10), Mac or Linux (tested on
+  Ubuntu 16.04)
 * Python 3.7, 3.6, 3.5, or 2.7
 
 Installation
@@ -42,39 +49,35 @@ Installation
 
 #. Install `Anaconda <https://www.anaconda.com/download/>`_
 #. Launch a ``terminal`` window (OS X, Linux), or ``Anaconda Prompt`` (Windows)
-#. Install llspy-slm:
+#. Install llspy-slm (note: as of version 0.2.0, you now must install
+   either pyside2 or pyqt explicitly):
 
     .. code:: bash
 
         > conda create -n slmenv
-        # for conda ≥ 4.4.0
         > conda activate slmenv
-        # for conda < 4.4.0
-        > activate slmenv  
-        # or on OS X / Linux
-        > source activate slmenv
+        > conda install -c talley -c conda-forge llspy-slm pyqt
 
-        > conda install -c talley -c conda-forge llspy-slm
+    The ``create -n slmenv`` line creates a virtual environment.
+    This is optional, but recommended as it easier to uninstall cleanly
+    and prevents conflicts with any other python environments.
+    If installing into a virtual environment, you must source the
+    environment before proceeding, and each time before using llspy-slm.
 
-    The ``create -n slmenv`` line creates a virtual environment.  This is optional, but recommended as it easier to uninstall cleanly and prevents conflicts with any other python environments.  If installing into a virtual environment, you must source the environment before proceeding, and each time before using llspy-slm.
-
-#. The gui can be launched with ``slmgen``.  You can create a bash script or batch file to autoload the environment and launch the program if desired.
+#. The gui can be launched with ``slmgen``.  You can create a bash script
+   or batch file to autoload the environment and launch the program if desired.
 
     .. code:: bash
 
         # Launch Anaconda Prompt and type...
-        # for conda ≥ 4.4.0
+
         > conda activate slmenv
-        # for conda < 4.4.0
-        > activate slmenv  
-        # or on OS X / Linux
-        > source activate slmenv
 
         # launch the gui
         > slmgen
 
 
-See complete usage notes in the `documentation <http://llspy.readthedocs.io/en/latest/slm.html>`_.
+See complete usage notes in the `documentation <http://llspy-slm.readthedocs.io/>`_.
 
 
 Bug Reports, Feature requests, etc...
