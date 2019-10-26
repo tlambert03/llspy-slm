@@ -24,3 +24,4 @@ var/
 *.egg
 
 .DS_Store
+.vscode/*
