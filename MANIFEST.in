@@ -1,0 +1,11 @@
+recursive-include slmgen *.py
+recursive-include slmgen *.ui
+recursive-include slmgen *.png
+recursive-include tests *.py
+include CHANGELOG.rst
+
+recursive-exclude build_mac *
+recursive-exclude build_win *
+recursive-exclude docs *
+recursive-exclude img *
+

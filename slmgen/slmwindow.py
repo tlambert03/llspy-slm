@@ -1,10 +1,10 @@
-from __future__ import division
-
 import re
 import sys
 import numpy as np
-from . import slm as _slm
+from .slm import linear_bessel_array, ronchi_ruling, hex_lattice
 from .luts import LUTs
+from . import __version__
+
 
 from qtpy import QtWidgets, QtCore, QtGui, API
 from .slm_pattern_dialog import Ui_Dialog
@@ -51,21 +51,21 @@ class PatternPreviewThread(QtCore.QThread):
 
     def run(self):
         if self.mode == "square":
-            output = _slm.linear_bessel_array(pattern_only=False, **self.params)
+            output = linear_bessel_array(pattern_only=False, **self.params)
         elif self.mode == "hex":
-            output = _slm.hex_lattice(pattern_only=False, **self.params)
+            output = hex_lattice(pattern_only=False, **self.params)
         elif self.mode == "ronchi":
             width = self.params.get("width", 1)
             slm_xpix = self.params.get("slm_xpix", 1280)
             slm_ypix = self.params.get("slm_ypix", 1024)
             # orientation = self.params.get('orientation', 'horizontal')
-            output = (_slm.ronchi_ruling(width, slm_xpix, slm_ypix),)
+            output = (ronchi_ruling(width, slm_xpix, slm_ypix),)
         self.finished.emit(output)
 
 
 class PatternWriteThread(QtCore.QRunnable):
     def __init__(self, path, params, mode="square"):
-        if 'pyqt' in API:
+        if "pyqt" in API:
             QtCore.QThread.__init__(self)
         else:
             super().__init__(self)
@@ -79,15 +79,15 @@ class PatternWriteThread(QtCore.QRunnable):
     def run(self):
         logger.info("Writing {} SLM pattern to {}".format(self.mode, self.path))
         if self.mode == "square":
-            _slm.linear_bessel_array(outdir=self.path, pattern_only=True, **self.params)
+            linear_bessel_array(outdir=self.path, pattern_only=True, **self.params)
         elif self.mode == "hex":
-            _slm.hex_lattice(outdir=self.path, pattern_only=True, **self.params)
+            hex_lattice(outdir=self.path, pattern_only=True, **self.params)
         elif self.mode == "ronchi":
             width = self.params.get("width", 1)
             slm_xpix = self.params.get("slm_xpix", 1280)
             slm_ypix = self.params.get("slm_ypix", 1024)
             # orientation = self.params.get('orientation', 'horizontal')
-            _slm.ronchi_ruling(width, slm_xpix, slm_ypix, outdir=self.path)
+            ronchi_ruling(width, slm_xpix, slm_ypix, outdir=self.path)
 
 
 class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
@@ -451,8 +451,6 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
             self.nBeamsSpin.setDisabled(True)
             self.autoSpacingCheckBox.setDisabled(True)
             self.cropSpin.setValue(0.22)
-        else:
-            pass
 
     def setSLM(self, slm):
         if slm not in SLMs:
@@ -472,8 +470,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
             self.slm_ypix_spin.setDisabled(True)
 
     def getparams(self):
-        opts = {}
-        opts["wave"] = float(self.wavelengthSpin.value()) / 1000
+        opts = {"wave": float(self.wavelengthSpin.value()) / 1000}
         opts["NA_inner"] = self.innerNASpin.value()
         opts["NA_outer"] = self.outerNASpin.value()
         if opts["NA_outer"] <= opts["NA_inner"]:
@@ -541,16 +538,18 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
             nbeam = combo[3][0]
             nbeam = int((nbeam - 1) / 2) + 1 if not isinstance(nbeam, str) else nbeam
             params = _params.copy()
-            params.update({
-                "wave": combo[0],
-                "NA_inner": combo[1],
-                "NA_outer": combo[2],
-                "n_beam": nbeam,
-                "spacing": combo[3][1],
-                "shift_x": combo[4],
-                "shift_y": combo[5],
-                "tilt": round(combo[6], 2),
-            })
+            params.update(
+                {
+                    "wave": combo[0],
+                    "NA_inner": combo[1],
+                    "NA_outer": combo[2],
+                    "n_beam": nbeam,
+                    "spacing": combo[3][1],
+                    "shift_x": combo[4],
+                    "shift_y": combo[5],
+                    "tilt": round(combo[6], 2),
+                }
+            )
             # for now, enforce "reasonable" cropping for single and 3-beam patterns
             if nbeam == 1:
                 params["crop"] = 0.0291
@@ -644,7 +643,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
                             t[1] = None
                         else:
                             t[1] = float(t[1])
-                        if all([x is not None for x in t]):
+                        if all(x is not None for x in t):
                             bstups.append(tuple(t))
                 except ValueError:
                     t = tup.strip("(").strip(")").split(",")
@@ -691,11 +690,10 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
                     a[1] += 0.000001  # include stop index
                     xshifts = np.arange(*a)
                     xshifts = sorted(
-                        list(set([round(y, 2) for y in xshifts if -100 < y < 100]))
+                        list({round(y, 2) for y in xshifts if -100 < y < 100})
                     )
             except TypeError as e:
                 errors.append("X Shift Range not valid: {}".format(e))
-
         yshift = self.batch_yShift.text()
         if not any(yshift.split(":")):
             yshifts = [0]
@@ -708,11 +706,10 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
                     a[1] += 0.000001  # include stop index
                     yshifts = np.arange(*a)
                     yshifts = sorted(
-                        list(set([round(y, 2) for y in yshifts if -100 < y < 100]))
+                        list({round(y, 2) for y in yshifts if -100 < y < 100})
                     )
             except TypeError as e:
                 errors.append("Y Shift Range not valid: {}".format(e))
-
         tilt = self.batch_tilt.text()
         if not any(tilt.split("-")):
             tilts = [0]
@@ -725,11 +722,10 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
                     a[1] += 0.000001  # include stop index
                     tilts = np.arange(*a)
                     tilts = sorted(
-                        list(set([round(ti, 2) for ti in tilts if -1.5 <= ti <= 1.5]))
+                        list({round(ti, 2) for ti in tilts if -1.5 <= ti <= 1.5})
                     )
             except TypeError as e:
                 errors.append("Tilt Range not valid: {}".format(e))
-
         # yshift = self.batch_yShift.text()
         # tilt = self.batch_tilt.text()
         if len(errors):
@@ -747,9 +743,7 @@ class SLMdialog(QtWidgets.QDialog, Ui_Dialog):
                 # if only 1 beam, force tilt to 0
                 if isinstance(c[3][0], int) and c[3][0] == 1:
                     c[6] = 0
-            combos = list(
-                set([tuple(c) for c in combos])
-            )  # get rid of duplicates, like from tilt=0
+            combos = list({tuple(c) for c in combos})
             if not len(combos):
                 raise InvalidSettingsError(
                     "No valid combinations!",
@@ -849,30 +843,18 @@ def getAbsoluteResourcePath(relativePath):
     return path
 
 
-def test():
-    import time
-    import sys
-
-    APP = QtWidgets.QApplication([])  # noqa
-    mainGUI = SLMdialog()
-    time.sleep(0.1)
-    mainGUI.close()
-    sys.exit(0)
-
-
 def main():
     import sys
 
     APP = QtWidgets.QApplication(sys.argv)
 
-    version = "0.1.0"
-    appicon = QtGui.QIcon(getAbsoluteResourcePath("img/slmgen_logo.png"))
+    appicon = QtGui.QIcon(getAbsoluteResourcePath("slmgen/slmgen_logo.png"))
     APP.setWindowIcon(appicon)
     # register icon with windows
     if sys.platform.startswith("win32"):
         import ctypes
 
-        myappid = "llspy.slmgen." + version
+        myappid = "llspy.slmgen." + __version__
         ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
     main = SLMdialog()
@@ -884,7 +866,3 @@ def main():
     exceptionHandler.errorMessage.connect(main.show_error_window)
 
     sys.exit(APP.exec_())
-
-
-if __name__ == "__main__":
-    main()
