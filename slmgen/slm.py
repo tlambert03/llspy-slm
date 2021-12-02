@@ -11,8 +11,11 @@ try:
     from numba import jit
 except ImportError:
 
-    def jit(f, **_):
-        return f
+    def jit(**_):
+        def _deco(f):
+            return f
+
+        return _deco
 
 
 # fmt: off
