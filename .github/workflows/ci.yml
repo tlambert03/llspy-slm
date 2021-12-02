@@ -33,7 +33,9 @@ jobs:
           pip install -e .[tests]
 
       - name: Test
-        run: pytest
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: pytest
 
       - uses: codecov/codecov-action@v2
 
