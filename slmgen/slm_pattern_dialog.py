@@ -68,7 +68,9 @@ class Ui_Dialog(object):
         self.gridLayout_6.setContentsMargins(21, 21, 21, 5)
         self.gridLayout_6.setObjectName("gridLayout_6")
         self.label = QtWidgets.QLabel(self.Generate)
-        self.label.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label.setObjectName("label")
         self.gridLayout_6.addWidget(self.label, 0, 0, 1, 1)
         self.wavelengthSpin = QtWidgets.QSpinBox(self.Generate)
@@ -81,7 +83,9 @@ class Ui_Dialog(object):
         self.wavelengthSpin.setObjectName("wavelengthSpin")
         self.gridLayout_6.addWidget(self.wavelengthSpin, 0, 1, 1, 1)
         self.label_2 = QtWidgets.QLabel(self.Generate)
-        self.label_2.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_2.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_2.setObjectName("label_2")
         self.gridLayout_6.addWidget(self.label_2, 0, 2, 1, 1)
         self.innerNASpin = QtWidgets.QDoubleSpinBox(self.Generate)
@@ -101,7 +105,9 @@ class Ui_Dialog(object):
         font.setBold(True)
         font.setWeight(75)
         self.label_16.setFont(font)
-        self.label_16.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_16.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_16.setObjectName("label_16")
         self.gridLayout_6.addWidget(self.label_16, 0, 4, 1, 2)
         self.PatternPresetsCombo = QtWidgets.QComboBox(self.Generate)
@@ -109,12 +115,16 @@ class Ui_Dialog(object):
         self.PatternPresetsCombo.setObjectName("PatternPresetsCombo")
         self.gridLayout_6.addWidget(self.PatternPresetsCombo, 0, 6, 1, 2)
         self.label_8 = QtWidgets.QLabel(self.Generate)
-        self.label_8.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_8.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_8.setObjectName("label_8")
         self.gridLayout_6.addWidget(self.label_8, 1, 0, 1, 1)
         self.label_3 = QtWidgets.QLabel(self.Generate)
         self.label_3.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.label_3.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_3.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_3.setObjectName("label_3")
         self.gridLayout_6.addWidget(self.label_3, 1, 2, 1, 1)
         self.outerNASpin = QtWidgets.QDoubleSpinBox(self.Generate)
@@ -130,7 +140,9 @@ class Ui_Dialog(object):
         self.gridLayout_6.addWidget(self.outerNASpin, 1, 3, 1, 1)
         self.nBeamsLabel = QtWidgets.QLabel(self.Generate)
         self.nBeamsLabel.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.nBeamsLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.nBeamsLabel.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.nBeamsLabel.setObjectName("nBeamsLabel")
         self.gridLayout_6.addWidget(self.nBeamsLabel, 1, 5, 1, 2)
         self.nBeamsSpin = QtWidgets.QSpinBox(self.Generate)
@@ -143,7 +155,9 @@ class Ui_Dialog(object):
         self.nBeamsSpin.setObjectName("nBeamsSpin")
         self.gridLayout_6.addWidget(self.nBeamsSpin, 1, 7, 1, 1)
         self.label_17 = QtWidgets.QLabel(self.Generate)
-        self.label_17.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_17.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_17.setObjectName("label_17")
         self.gridLayout_6.addWidget(self.label_17, 2, 0, 1, 1)
         self.SpacingWidget = QtWidgets.QWidget(self.Generate)
@@ -153,7 +167,9 @@ class Ui_Dialog(object):
         self.gridLayout_5.setObjectName("gridLayout_5")
         self.label_4 = QtWidgets.QLabel(self.SpacingWidget)
         self.label_4.setEnabled(False)
-        self.label_4.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_4.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_4.setObjectName("label_4")
         self.gridLayout_5.addWidget(self.label_4, 0, 0, 1, 1)
         self.autoSpacingCheckBox = QtWidgets.QCheckBox(self.SpacingWidget)
@@ -186,7 +202,9 @@ class Ui_Dialog(object):
         self.gridLayout_5.addWidget(self.spacingSpin, 0, 1, 1, 1)
         self.gridLayout_6.addWidget(self.SpacingWidget, 2, 5, 2, 3)
         self.label_7 = QtWidgets.QLabel(self.Generate)
-        self.label_7.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_7.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_7.setObjectName("label_7")
         self.gridLayout_6.addWidget(self.label_7, 3, 0, 1, 1)
         self.tiltSpin = QtWidgets.QDoubleSpinBox(self.Generate)
@@ -200,7 +218,9 @@ class Ui_Dialog(object):
         self.tiltSpin.setObjectName("tiltSpin")
         self.gridLayout_6.addWidget(self.tiltSpin, 3, 1, 1, 1)
         self.label_10 = QtWidgets.QLabel(self.Generate)
-        self.label_10.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_10.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_10.setObjectName("label_10")
         self.gridLayout_6.addWidget(self.label_10, 4, 0, 1, 1)
         self.magSpin = QtWidgets.QDoubleSpinBox(self.Generate)
@@ -214,7 +234,9 @@ class Ui_Dialog(object):
         self.magSpin.setObjectName("magSpin")
         self.gridLayout_6.addWidget(self.magSpin, 4, 1, 1, 1)
         self.label_15 = QtWidgets.QLabel(self.Generate)
-        self.label_15.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_15.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_15.setObjectName("label_15")
         self.gridLayout_6.addWidget(self.label_15, 5, 0, 1, 1)
         self.cropSpin = QtWidgets.QDoubleSpinBox(self.Generate)
@@ -249,7 +271,9 @@ class Ui_Dialog(object):
         self.gridLayout.setObjectName("gridLayout")
         self.idealNALabel = QtWidgets.QLabel(self.HexWidget)
         self.idealNALabel.setMaximumSize(QtCore.QSize(16777215, 16777215))
-        self.idealNALabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.idealNALabel.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.idealNALabel.setObjectName("idealNALabel")
         self.gridLayout.addWidget(self.idealNALabel, 0, 0, 1, 1)
         self.idealNASpin = QtWidgets.QDoubleSpinBox(self.HexWidget)
@@ -265,7 +289,9 @@ class Ui_Dialog(object):
         self.gridLayout.addWidget(self.idealNASpin, 0, 1, 1, 1)
         self.hexFillFactorLabel = QtWidgets.QLabel(self.HexWidget)
         self.hexFillFactorLabel.setEnabled(True)
-        self.hexFillFactorLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.hexFillFactorLabel.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.hexFillFactorLabel.setObjectName("hexFillFactorLabel")
         self.gridLayout.addWidget(self.hexFillFactorLabel, 1, 0, 1, 1)
         self.hexFillFactorSpin = QtWidgets.QDoubleSpinBox(self.HexWidget)
@@ -282,7 +308,9 @@ class Ui_Dialog(object):
         self.gridLayout.addWidget(self.hexFillFactorSpin, 1, 1, 1, 1)
         self.hexBoundLabel = QtWidgets.QLabel(self.HexWidget)
         self.hexBoundLabel.setEnabled(True)
-        self.hexBoundLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.hexBoundLabel.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.hexBoundLabel.setObjectName("hexBoundLabel")
         self.gridLayout.addWidget(self.hexBoundLabel, 2, 0, 1, 1)
         self.hexBoundCombo = QtWidgets.QComboBox(self.HexWidget)
@@ -314,7 +342,9 @@ class Ui_Dialog(object):
         self.gridLayout_3.setContentsMargins(21, 21, 21, 5)
         self.gridLayout_3.setObjectName("gridLayout_3")
         self.label_5 = QtWidgets.QLabel(self.Batch)
-        self.label_5.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_5.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_5.setObjectName("label_5")
         self.gridLayout_3.addWidget(self.label_5, 1, 0, 1, 1)
         self.batch_wave = QtWidgets.QLineEdit(self.Batch)
@@ -330,23 +360,33 @@ class Ui_Dialog(object):
         self.batchProcessButton.setObjectName("batchProcessButton")
         self.gridLayout_3.addWidget(self.batchProcessButton, 7, 1, 1, 6)
         self.label_24 = QtWidgets.QLabel(self.Batch)
-        self.label_24.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_24.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_24.setObjectName("label_24")
         self.gridLayout_3.addWidget(self.label_24, 6, 0, 1, 1)
         self.label_22 = QtWidgets.QLabel(self.Batch)
-        self.label_22.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_22.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_22.setObjectName("label_22")
         self.gridLayout_3.addWidget(self.label_22, 5, 2, 1, 1)
         self.label_19 = QtWidgets.QLabel(self.Batch)
-        self.label_19.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_19.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_19.setObjectName("label_19")
         self.gridLayout_3.addWidget(self.label_19, 3, 0, 1, 1)
         self.label_18 = QtWidgets.QLabel(self.Batch)
-        self.label_18.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_18.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_18.setObjectName("label_18")
         self.gridLayout_3.addWidget(self.label_18, 2, 0, 1, 1)
         self.label_21 = QtWidgets.QLabel(self.Batch)
-        self.label_21.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_21.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_21.setObjectName("label_21")
         self.gridLayout_3.addWidget(self.label_21, 5, 0, 1, 1)
         self.batch_outerNA = QtWidgets.QLineEdit(self.Batch)
@@ -360,7 +400,9 @@ class Ui_Dialog(object):
         self.batch_xShift.setObjectName("batch_xShift")
         self.gridLayout_3.addWidget(self.batch_xShift, 5, 1, 1, 1)
         self.label_20 = QtWidgets.QLabel(self.Batch)
-        self.label_20.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_20.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_20.setObjectName("label_20")
         self.gridLayout_3.addWidget(self.label_20, 4, 0, 1, 1)
         self.batch_yShift = QtWidgets.QLineEdit(self.Batch)
@@ -375,7 +417,9 @@ class Ui_Dialog(object):
         self.batch_innerNA.setObjectName("batch_innerNA")
         self.gridLayout_3.addWidget(self.batch_innerNA, 2, 1, 1, 6)
         self.label_23 = QtWidgets.QLabel(self.Batch)
-        self.label_23.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_23.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_23.setObjectName("label_23")
         self.gridLayout_3.addWidget(self.label_23, 5, 4, 1, 1)
         self.label_6 = QtWidgets.QLabel(self.Batch)
@@ -383,7 +427,9 @@ class Ui_Dialog(object):
         font = QtGui.QFont()
         font.setItalic(True)
         self.label_6.setFont(font)
-        self.label_6.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.label_6.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.label_6.setObjectName("label_6")
         self.gridLayout_3.addWidget(self.label_6, 0, 0, 1, 7)
         self.batch_outputDir = QtWidgets.QLineEdit(self.Batch)
@@ -410,7 +456,9 @@ class Ui_Dialog(object):
         self.SLMmodelCombo.addItem("")
         self.SLMmodelCombo.addItem("")
         self.gridLayout_4.addWidget(self.SLMmodelCombo, 0, 1, 1, 2)
-        spacerItem = QtWidgets.QSpacerItem(320, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem = QtWidgets.QSpacerItem(
+            320, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout_4.addItem(spacerItem, 0, 3, 1, 1)
         self.label_11 = QtWidgets.QLabel(self.Settings)
         self.label_11.setObjectName("label_11")
@@ -426,7 +474,9 @@ class Ui_Dialog(object):
         self.slm_pixelSize_spin.setProperty("value", 13.662)
         self.slm_pixelSize_spin.setObjectName("slm_pixelSize_spin")
         self.gridLayout_4.addWidget(self.slm_pixelSize_spin, 1, 1, 1, 1)
-        spacerItem1 = QtWidgets.QSpacerItem(358, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem1 = QtWidgets.QSpacerItem(
+            358, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout_4.addItem(spacerItem1, 1, 2, 1, 2)
         self.label_12 = QtWidgets.QLabel(self.Settings)
         self.label_12.setObjectName("label_12")
@@ -440,7 +490,9 @@ class Ui_Dialog(object):
         self.slm_xpix_spin.setProperty("value", 1280)
         self.slm_xpix_spin.setObjectName("slm_xpix_spin")
         self.gridLayout_4.addWidget(self.slm_xpix_spin, 2, 1, 1, 1)
-        spacerItem2 = QtWidgets.QSpacerItem(358, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem2 = QtWidgets.QSpacerItem(
+            358, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout_4.addItem(spacerItem2, 2, 2, 1, 2)
         self.label_13 = QtWidgets.QLabel(self.Settings)
         self.label_13.setObjectName("label_13")
@@ -454,12 +506,18 @@ class Ui_Dialog(object):
         self.slm_ypix_spin.setProperty("value", 1024)
         self.slm_ypix_spin.setObjectName("slm_ypix_spin")
         self.gridLayout_4.addWidget(self.slm_ypix_spin, 3, 1, 1, 1)
-        spacerItem3 = QtWidgets.QSpacerItem(358, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        spacerItem3 = QtWidgets.QSpacerItem(
+            358, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum
+        )
         self.gridLayout_4.addItem(spacerItem3, 3, 2, 1, 2)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 107, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        spacerItem4 = QtWidgets.QSpacerItem(
+            20, 107, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding
+        )
         self.gridLayout_4.addItem(spacerItem4, 4, 3, 1, 1)
         self.maskLUTLabel = QtWidgets.QLabel(self.Settings)
-        self.maskLUTLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.maskLUTLabel.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.maskLUTLabel.setObjectName("maskLUTLabel")
         self.gridLayout_4.addWidget(self.maskLUTLabel, 0, 4, 1, 1)
         self.maskLUTCombo = QtWidgets.QComboBox(self.Settings)
@@ -468,7 +526,9 @@ class Ui_Dialog(object):
         self.maskLUTCombo.setObjectName("maskLUTCombo")
         self.gridLayout_4.addWidget(self.maskLUTCombo, 0, 5, 1, 1)
         self.sampleLUTLabel = QtWidgets.QLabel(self.Settings)
-        self.sampleLUTLabel.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.sampleLUTLabel.setAlignment(
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.sampleLUTLabel.setObjectName("sampleLUTLabel")
         self.gridLayout_4.addWidget(self.sampleLUTLabel, 1, 4, 1, 1)
         self.sampleLUTCombo = QtWidgets.QComboBox(self.Settings)
@@ -481,9 +541,9 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
         self.tabWidget.setCurrentIndex(0)
-        self.autoSpacingCheckBox.clicked['bool'].connect(self.spacingSpin.setDisabled)
-        self.autoSpacingCheckBox.clicked['bool'].connect(self.label_4.setDisabled)
-        self.autoSpacingCheckBox.clicked['bool'].connect(self.fudgeSpin.setEnabled)
+        self.autoSpacingCheckBox.clicked["bool"].connect(self.spacingSpin.setDisabled)
+        self.autoSpacingCheckBox.clicked["bool"].connect(self.label_4.setDisabled)
+        self.autoSpacingCheckBox.clicked["bool"].connect(self.fudgeSpin.setEnabled)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         Dialog.setTabOrder(self.wavelengthSpin, self.shiftXSpin)
         Dialog.setTabOrder(self.shiftXSpin, self.shiftYSpin)
@@ -532,11 +592,21 @@ class Ui_Dialog(object):
         self.nBeamsLabel.setText(_translate("Dialog", "# Beams:"))
         self.label_17.setText(_translate("Dialog", "Shift Y:"))
         self.label_4.setText(_translate("Dialog", "Spacing:"))
-        self.autoSpacingCheckBox.setToolTip(_translate("Dialog", "Enabling auto spacing will set the spacing to\n"
-"factor * wavelength/NA_inner"))
+        self.autoSpacingCheckBox.setToolTip(
+            _translate(
+                "Dialog",
+                "Enabling auto spacing will set the spacing to\n"
+                "factor * wavelength/NA_inner",
+            )
+        )
         self.autoSpacingCheckBox.setText(_translate("Dialog", "Auto spacing:"))
-        self.fudgeSpin.setToolTip(_translate("Dialog", "Enabling auto spacing will set the spacing to\n"
-"factor * wavelength/NA_inner"))
+        self.fudgeSpin.setToolTip(
+            _translate(
+                "Dialog",
+                "Enabling auto spacing will set the spacing to\n"
+                "factor * wavelength/NA_inner",
+            )
+        )
         self.label_7.setText(_translate("Dialog", "Tilt (rad):"))
         self.label_10.setText(_translate("Dialog", "Mag:"))
         self.label_15.setText(_translate("Dialog", "Crop:"))
@@ -548,27 +618,48 @@ class Ui_Dialog(object):
         self.hexBoundCombo.setItemText(0, _translate("Dialog", "Gauss"))
         self.hexBoundCombo.setItemText(1, _translate("Dialog", "Step"))
         self.hexBoundCombo.setItemText(2, _translate("Dialog", "None"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Generate), _translate("Dialog", "Generate"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.Generate), _translate("Dialog", "Generate")
+        )
         self.label_5.setText(_translate("Dialog", "Wavelength(nm):"))
         self.batch_wave.setPlaceholderText(_translate("Dialog", " e.g.  488, 560, 640"))
-        self.batchProcessButton.setText(_translate("Dialog", "Batch Write SLM Patterns"))
+        self.batchProcessButton.setText(
+            _translate("Dialog", "Batch Write SLM Patterns")
+        )
         self.label_24.setText(_translate("Dialog", "Output Dir:"))
         self.label_22.setText(_translate("Dialog", "Y Shift:"))
         self.label_19.setText(_translate("Dialog", "Outer NA:"))
         self.label_18.setText(_translate("Dialog", "Inner NA:"))
         self.label_21.setText(_translate("Dialog", "X Shift:"))
         self.batch_outerNA.setPlaceholderText(_translate("Dialog", " e.g.  0.55, 0.40"))
-        self.batch_beamSpacing.setPlaceholderText(_translate("Dialog", " e.g.  (1,0), (3, 22), (fill, auto)"))
-        self.batch_xShift.setPlaceholderText(_translate("Dialog", "start[:stop[:step]]"))
+        self.batch_beamSpacing.setPlaceholderText(
+            _translate("Dialog", " e.g.  (1,0), (3, 22), (fill, auto)")
+        )
+        self.batch_xShift.setPlaceholderText(
+            _translate("Dialog", "start[:stop[:step]]")
+        )
         self.label_20.setText(_translate("Dialog", "(#Beam, Space):"))
-        self.batch_yShift.setPlaceholderText(_translate("Dialog", "start[:stop[:step]]"))
+        self.batch_yShift.setPlaceholderText(
+            _translate("Dialog", "start[:stop[:step]]")
+        )
         self.batch_tilt.setPlaceholderText(_translate("Dialog", "start[:stop[:step]]"))
-        self.batch_innerNA.setPlaceholderText(_translate("Dialog", " e.g.  0.44, 0.325"))
+        self.batch_innerNA.setPlaceholderText(
+            _translate("Dialog", " e.g.  0.44, 0.325")
+        )
         self.label_23.setText(_translate("Dialog", "Tilt:"))
-        self.label_6.setText(_translate("Dialog", "All fields can be declared as comma seperated lists.  All permutations will be calculated "))
-        self.batch_outputDir.setPlaceholderText(_translate("Dialog", " directory where files will be written..."))
+        self.label_6.setText(
+            _translate(
+                "Dialog",
+                "All fields can be declared as comma seperated lists.  All permutations will be calculated ",
+            )
+        )
+        self.batch_outputDir.setPlaceholderText(
+            _translate("Dialog", " directory where files will be written...")
+        )
         self.chooseBatchOutputDir.setText(_translate("Dialog", "Choose Dir"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Batch), _translate("Dialog", "Batch Square"))
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.Batch), _translate("Dialog", "Batch Square")
+        )
         self.label_14.setText(_translate("Dialog", "SLM model:"))
         self.SLMmodelCombo.setItemText(0, _translate("Dialog", "SXGA-3DM"))
         self.SLMmodelCombo.setItemText(1, _translate("Dialog", "Custom"))
@@ -577,5 +668,6 @@ class Ui_Dialog(object):
         self.label_13.setText(_translate("Dialog", "# pixels Y:"))
         self.maskLUTLabel.setText(_translate("Dialog", "Mask Intensity LUT:"))
         self.sampleLUTLabel.setText(_translate("Dialog", "Sample Intensity LUT:"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.Settings), _translate("Dialog", "Settings"))
-
+        self.tabWidget.setTabText(
+            self.tabWidget.indexOf(self.Settings), _translate("Dialog", "Settings")
+        )

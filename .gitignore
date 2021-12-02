@@ -25,3 +25,4 @@ var/
 
 .DS_Store
 .vscode/*
+.coverage

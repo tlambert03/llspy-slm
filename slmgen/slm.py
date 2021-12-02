@@ -1,14 +1,24 @@
-from __future__ import division
-import numpy as np
 import os
 import sys
+
+import numpy as np
+from numpy.fft import fft2, fftshift, ifftshift
 from PIL import Image
-from numpy.fft import fft2, ifftshift, fftshift
 from scipy.interpolate import RectBivariateSpline, RegularGridInterpolator
 from scipy.ndimage import interpolation
-from numba import jit
+
+try:
+    from numba import jit
+except ImportError:
+
+    def jit(**_):
+        def _deco(f):
+            return f
+
+        return _deco
 
 
+# fmt: off
 wavesets = {
     'Hex_Fund': [
         [0.8660254037844385, 0.5, 0.0, -0.54, 0.8660254037844387, 0.0],
@@ -142,45 +152,67 @@ wavesets = {
         [0.9449111825230679, 0.3273268353539886, 0.0, -0.944911182523068, -0.3273268353539886, 0.0]
     ]
 }
+# fmt: on
 
-def ronchi_ruling(width=1, slm_xpix=1280, slm_ypix=1024, orientation='horizontal',
-                  outdir=None):
+
+def ronchi_ruling(
+    width=1, slm_xpix=1280, slm_ypix=1024, orientation="horizontal", outdir=None
+):
     out = np.zeros((slm_ypix, slm_xpix), np.int8)
-    if orientation.lower() == 'vertical':
+    if orientation.lower() == "vertical":
         for i in range(width):
-            out[i::width*2] = 1
-    elif orientation.lower() == 'horizontal':
+            out[i :: width * 2] = 1
+    elif orientation.lower() == "horizontal":
         for i in range(width):
-            out[:, i::width*2] = 1
+            out[:, i :: width * 2] = 1
     else:
-        raise ValueError('orientation argument must be either "horizontal" or "vertical", '
-                         'got: '.format(orientation))
+        raise ValueError(
+            'orientation argument must be either "horizontal" or "vertical", '
+            "got: ".format(orientation)
+        )
 
     if outdir is not None:
         outdir = os.path.abspath(os.path.expanduser(outdir))
         if os.path.isdir(outdir):
-            name = 'Ronchi_{}pix'.format(width)
-            outpath = os.path.join(outdir, name + '.png')
-            imout = Image.fromarray(out.astype(np.uint8)*255)
-            imout = imout.convert('1')
+            name = "Ronchi_{}pix".format(width)
+            outpath = os.path.join(outdir, name + ".png")
+            imout = Image.fromarray(out.astype(np.uint8) * 255)
+            imout = imout.convert("1")
             imout.save(outpath)
 
     return out
 
 
-def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
-                   n_beam='fill', crop=0.22, tilt=0, shift_x=0, shift_y=0,
-                   mag=167.364, pixel=13.662, slm_xpix=1280, slm_ypix=1024,
-                   fillchip=0.95, fudge=0.95, show=False, outdir=None,
-                   pattern_only=True):
+def linear_bessel_array(
+    wave=0.488,
+    NA_inner=0.44,
+    NA_outer=0.55,
+    spacing=None,
+    n_beam="fill",
+    crop=0.22,
+    tilt=0,
+    shift_x=0,
+    shift_y=0,
+    mag=167.364,
+    pixel=13.662,
+    slm_xpix=1280,
+    slm_ypix=1024,
+    fillchip=0.95,
+    fudge=0.95,
+    show=False,
+    outdir=None,
+    pattern_only=True,
+):
 
     # auto-choose good spacing
     if not spacing:
         spacing = fudge * wave / NA_inner
 
     #  to fill the chip
-    if n_beam == 'fill' and fillchip:
-        n_beam = int(np.floor(1 + ((fillchip * (slm_xpix * (pixel/mag)/2)) / spacing)))
+    if n_beam == "fill" and fillchip:
+        n_beam = int(
+            np.floor(1 + ((fillchip * (slm_xpix * (pixel / mag) / 2)) / spacing))
+        )
 
     # expand cropping for single bessel
     # if n_beam == 1:
@@ -188,7 +220,7 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
 
     # Populate real space array
     dx = pixel / mag
-    x = np.arange(-(slm_xpix)/2, (slm_xpix+1)/2, 1.0) * dx
+    x = np.arange(-(slm_xpix) / 2, (slm_xpix + 1) / 2, 1.0) * dx
     y = x
     # for scipy interpolation functions, we don't use the meshgrid...
     # [x, y] = np.meshgrid(x, y)
@@ -199,29 +231,25 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
 
     # Populate k space array
     dk = 2 * np.pi / (slm_xpix + 1) / dx
-    kx = np.arange(-(slm_xpix)/2, (slm_xpix+1)/2, 1.0) * dk
+    kx = np.arange(-(slm_xpix) / 2, (slm_xpix + 1) / 2, 1.0) * dk
     ky = kx
     [kx, ky] = np.meshgrid(kx, ky)
-    kr = np.sqrt(kx*kx + ky*ky)
+    kr = np.sqrt(kx * kx + ky * ky)
 
     # Mask k-space array according to inner and outer NA
-    pupil_mask = (kr < NA_outer * (2 * np.pi / wave)) & (kr > NA_inner * (2 * np.pi/wave))
+    pupil_mask = (kr < NA_outer * (2 * np.pi / wave)) & (
+        kr > NA_inner * (2 * np.pi / wave)
+    )
 
     # Generate array of bessel beams by applying phase ramps in k-space
     pupil_field_ideal = pupil_mask.astype(np.complex128)
 
     f = kx * spacing * np.cos(tilt) + ky * spacing * np.sin(tilt)
 
-    if getattr(sys, 'frozen', False):
-        @jit(nopython=True)
-        def calc(v, ii):
-            A = np.exp(1j * f * ii) + np.exp(-1j * f * ii)
-            return v + np.multiply(pupil_mask, A)
-    else:
-        @jit(nopython=True)
-        def calc(v, ii):
-            A = np.exp(1j * f * ii) + np.exp(-1j * f * ii)
-            return v + np.multiply(pupil_mask, A)
+    @jit(nopython=True)
+    def calc(v, ii):
+        A = np.exp(1j * f * ii) + np.exp(-1j * f * ii)
+        return v + np.multiply(pupil_mask, A)
 
     for ii in range(1, n_beam):
         # A = np.exp(1j * f * ii)
@@ -237,10 +265,11 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
     # Display ideal intensity at sample (incorporates supersampling)
     if show:
         import matplotlib.pyplot as plt
+
         plt.figure()
-        plt.imshow(np.abs(slm_field_ideal*slm_field_ideal))
-        plt.title('Ideal coherent bessel light sheet intensity')
-        plt.axis('image')
+        plt.imshow(np.abs(slm_field_ideal * slm_field_ideal))
+        plt.title("Ideal coherent bessel light sheet intensity")
+        plt.axis("image")
 
     # Interpolate back onto SLM pixels and apply cropping factor
     # interpolator = interp2d(x, x, slm_field_ideal)
@@ -249,35 +278,48 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
     # slm_pattern *= np.abs(slm_pattern) > crop
     slm_pattern[np.abs(slm_pattern) < crop] = 0
     eps = np.finfo(float).eps
-    slm_pattern = np.sign(slm_pattern + eps) * np.pi/2 + np.pi/2
+    slm_pattern = np.sign(slm_pattern + eps) * np.pi / 2 + np.pi / 2
 
     # Account for rectangular aspect ratio of SLM and convert phase to binary
-    low = int(np.floor((slm_xpix/2)-(slm_ypix/2)-1))
+    low = int(np.floor((slm_xpix / 2) - (slm_ypix / 2) - 1))
     high = int(low + slm_ypix)
     slm_pattern_final = (slm_pattern[low:high, :] / np.pi) != 0
 
     if outdir is not None:
         outdir = os.path.abspath(os.path.expanduser(outdir))
         if os.path.isdir(outdir):
-            namefmt = '{:.0f}_{:2d}b_s{:.2f}_c{:.2f}_na{:.0f}-{:.0f}_x{:02f}_y{:02f}_t{:0.3f}'
-            name = namefmt.format(wave*1000, n_beam*2-1, spacing, crop,
-                                  100*NA_outer, 100*NA_inner, shift_x, shift_y, tilt)
-            name = name.replace('.', 'p')
-            outpath = os.path.join(outdir, name + '.png')
+            namefmt = (
+                "{:.0f}_{:2d}b_s{:.2f}_c{:.2f}_na{:.0f}-{:.0f}_x{:02f}_y{:02f}_t{:0.3f}"
+            )
+            name = namefmt.format(
+                wave * 1000,
+                n_beam * 2 - 1,
+                spacing,
+                crop,
+                100 * NA_outer,
+                100 * NA_inner,
+                shift_x,
+                shift_y,
+                tilt,
+            )
+            name = name.replace(".", "p")
+            outpath = os.path.join(outdir, name + ".png")
 
-            imout = Image.fromarray(slm_pattern_final.astype(np.uint8)*255)
-            imout = imout.convert('1')
+            imout = Image.fromarray(slm_pattern_final.astype(np.uint8) * 255)
+            imout = imout.convert("1")
             imout.save(outpath)
 
     if show:
         plt.figure()
-        plt.imshow(slm_pattern, interpolation='nearest')
-        plt.title('Cropped and pixelated phase from SLM pattern exiting the polarizing beam splitter')
-        plt.axis('image')
+        plt.imshow(slm_pattern, interpolation="nearest")
+        plt.title(
+            "Cropped and pixelated phase from SLM pattern exiting the polarizing beam splitter"
+        )
+        plt.axis("image")
 
         plt.figure()
-        plt.imshow(slm_pattern_final, interpolation='nearest', cmap='gray')
-        plt.title('Binarized image to output to SLM')
+        plt.imshow(slm_pattern_final, interpolation="nearest", cmap="gray")
+        plt.title("Binarized image to output to SLM")
 
     if pattern_only:
         if show:
@@ -292,7 +334,9 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
     # this method uses nearest neighbor like the matlab version
     [xmesh, ymesh] = np.meshgrid(x, y)
     coords = np.array([xmesh.flatten(), ymesh.flatten()]).T
-    interpolator = RegularGridInterpolator((x_slm, y_slm), slm_pattern, method='nearest')
+    interpolator = RegularGridInterpolator(
+        (x_slm, y_slm), slm_pattern, method="nearest"
+    )
     slm_pattern_cal = interpolator(coords)  # supposed to be nearest neighbor
     slm_pattern_cal = slm_pattern_cal.reshape(len(x), len(y)).T
     slm_field = np.exp(1j * slm_pattern_cal)
@@ -307,13 +351,21 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
     if show:
         plt.figure()
         ax1 = plt.subplot(1, 2, 1)
-        plt.imshow((pupil_field_impinging * np.conj(pupil_field_impinging)).real, interpolation='nearest', cmap='inferno')
-        plt.clim(0, (2 * n_beam-1) * 3e6)
-        plt.title('Intensity impinging on annular mask')
+        plt.imshow(
+            (pupil_field_impinging * np.conj(pupil_field_impinging)).real,
+            interpolation="nearest",
+            cmap="inferno",
+        )
+        plt.clim(0, (2 * n_beam - 1) * 3e6)
+        plt.title("Intensity impinging on annular mask")
         plt.subplot(1, 2, 2, sharex=ax1)
-        plt.imshow((pupil_field * np.conj(pupil_field)).real, interpolation='nearest', cmap='inferno')
-        plt.clim(0, (2 * n_beam-1) * 3e6)
-        plt.title('Intensity after annular mask')
+        plt.imshow(
+            (pupil_field * np.conj(pupil_field)).real,
+            interpolation="nearest",
+            cmap="inferno",
+        )
+        plt.clim(0, (2 * n_beam - 1) * 3e6)
+        plt.title("Intensity after annular mask")
 
     # Compute intensity at sample
     field_final = fftshift(fft2(ifftshift(pupil_field)))
@@ -321,9 +373,9 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
 
     if show:
         plt.figure()
-        plt.imshow(intensity_final, interpolation='nearest')
-        plt.title('Actual intensity at sample')
-        plt.axis('image')
+        plt.imshow(intensity_final, interpolation="nearest")
+        plt.title("Actual intensity at sample")
+        plt.axis("image")
 
         plt.show()
 
@@ -331,34 +383,50 @@ def linear_bessel_array(wave=0.488, NA_inner=0.44, NA_outer=0.55, spacing=None,
     return slm_pattern_final, intensity_final, pupil_field
 
 
-def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
-                       shift_x=0, shift_y=0, NA_outer=0.6,
-                       NA_ideal=0.55, NA_inner=0.505, tilt=0, field_sign=1,
-                       slm_xpix=1280, slm_ypix=1024,
-                       xyPol=(0, 1), pos_offset=(0, 0),
-                       bound='gauss', fill_factor=0.75, crop=0.15,
-                       pattern_only=True, outdir=None, PW=None, **kwargs):
+def hex_lattice(
+    wave=0.488,
+    pixel=13.665,
+    mag=167.364,
+    shift_x=0,
+    shift_y=0,
+    NA_outer=0.6,
+    NA_ideal=0.55,
+    NA_inner=0.505,
+    tilt=0,
+    field_sign=1,
+    slm_xpix=1280,
+    slm_ypix=1024,
+    xyPol=(0, 1),
+    pos_offset=(0, 0),
+    bound="gauss",
+    fill_factor=0.75,
+    crop=0.15,
+    pattern_only=True,
+    outdir=None,
+    PW=None,
+    **kwargs,
+):
 
     if isinstance(PW, list):
         PW = np.array(PW)
     elif isinstance(PW, str):
         PW = np.array(wavesets[PW])
     else:
-        PW = np.array(wavesets['Hex_Fund_MaxComp'])
+        PW = np.array(wavesets["Hex_Fund_MaxComp"])
 
     # define the plot dimensions for the lattice:
     SLMPixSize = pixel / mag  # SLM pixel size when projected to the sample, in microns
-    numpix = [int(slm_xpix/2), int(slm_ypix/2)]
+    numpix = [int(slm_xpix / 2), int(slm_ypix / 2)]
     pixsize = np.array([SLMPixSize, SLMPixSize]) / (wave / 1.33)
 
     # calc the cone angle for the wavevectors of the ideal 2D lattice
     # which is written to the SLM:
     # NA_ideal = min(max(NA_ideal, NA_inner), NA_outer)
     index = 1.33  # refractive index of the imaging medium
-    ConeAng = np.arcsin(NA_ideal/index)  # cone angle of illumination in radians
+    ConeAng = np.arcsin(NA_ideal / index)  # cone angle of illumination in radians
 
     # ensure that the k vectors lie in a plane (i.e., cone angle = 90 deg):
-    PW[:, 3:5] = PW[:, 3:5] / np.sqrt(1 - PW[0, 5]**2)
+    PW[:, 3:5] = PW[:, 3:5] / np.sqrt(1 - PW[0, 5] ** 2)
     PW[:, 5] = 0
 
     # now modify each k vector to reflect the cone angle upon which they lie:
@@ -408,8 +476,8 @@ def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
     #   max. confinement in each direction is given by the largest
     #      difference of the k vector components along that axis
     period = np.zeros((2, 2))
-    for m in range(2):   # loop thru both axes
-        mindiff = 2      # difference must be < 2 for normalized k
+    for m in range(2):  # loop thru both axes
+        mindiff = 2  # difference must be < 2 for normalized k
         maxdiff = 0
         for n in range(B[0]):
             for q in range(B[0]):  # double loop thru all plane wave pairs
@@ -436,28 +504,28 @@ def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
     Ex = np.zeros(A)
     Ey = np.zeros(A)
     Ez = np.zeros(A)
-    for q in range(B[0]):   # loop thru all plane waves
+    for q in range(B[0]):  # loop thru all plane waves
         phase = np.exp(2 * np.pi * 1j * (PW[q, 3] * X + PW[q, 4] * Y))
         Ex = Ex + PW[q, 0] * phase
         Ey = Ey + PW[q, 1] * phase
         Ez = Ez + PW[q, 2] * phase
 
     # expand through all quadrants:
-    Extemp = np.zeros(np.array(A)*2, dtype=np.complex128)
-    Eytemp = np.zeros(np.array(A)*2, dtype=np.complex128)
-    Eztemp = np.zeros(np.array(A)*2, dtype=np.complex128)
+    Extemp = np.zeros(np.array(A) * 2, dtype=np.complex128)
+    Eytemp = np.zeros(np.array(A) * 2, dtype=np.complex128)
+    Eztemp = np.zeros(np.array(A) * 2, dtype=np.complex128)
     # load the original data into the first quadrant:
-    Extemp[A[0]:, A[1]:] = Ex
-    Eytemp[A[0]:, A[1]:] = Ey
-    Eztemp[A[0]:, A[1]:] = Ez
+    Extemp[A[0] :, A[1] :] = Ex
+    Eytemp[A[0] :, A[1] :] = Ey
+    Eztemp[A[0] :, A[1] :] = Ez
     # now mirror along each dimension and use parities to fill other quadrants:
     # simply mirror the data since parity is always even for magnitudes:
-    Extemp[:A[0], A[1]:] = np.flip(Ex, 0)
-    Eytemp[:A[0], A[1]:] = np.flip(Ey, 0)
-    Eztemp[:A[0], A[1]:] = np.flip(Ez, 0)
-    Extemp[:, :A[1]] = np.flip(Extemp[:, A[1]:], 1)
-    Eytemp[:, :A[1]] = np.flip(Eytemp[:, A[1]:], 1)
-    Eztemp[:, :A[1]] = np.flip(Eztemp[:, A[1]:], 1)
+    Extemp[: A[0], A[1] :] = np.flip(Ex, 0)
+    Eytemp[: A[0], A[1] :] = np.flip(Ey, 0)
+    Eztemp[: A[0], A[1] :] = np.flip(Ez, 0)
+    Extemp[:, : A[1]] = np.flip(Extemp[:, A[1] :], 1)
+    Eytemp[:, : A[1]] = np.flip(Eytemp[:, A[1] :], 1)
+    Eztemp[:, : A[1]] = np.flip(Eztemp[:, A[1] :], 1)
     # delete the extra vector from mirroring in each dimension:
     Extemp = np.delete(Extemp, A[0], 0)
     Eytemp = np.delete(Eytemp, A[0], 0)
@@ -500,20 +568,20 @@ def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
 
     # calc and plot the bound 2D lattice at the SLM:
     A = RealE.shape
-    if bound == 'step':
+    if bound == "step":
         maxzpix = int(lattice_full_width / (2 * pixsize[0] * fill_factor))
         midpix = int(A[0] / 2)
-        RealE[:(midpix - maxzpix), :] = 0
-        RealE[(midpix + maxzpix)+1:, :] = 0
-    elif bound == 'gauss':
-        z = np.arange(-numpix[1], numpix[1]+1) * pixsize[1]
+        RealE[: (midpix - maxzpix), :] = 0
+        RealE[(midpix + maxzpix) + 1 :, :] = 0
+    elif bound == "gauss":
+        z = np.arange(-numpix[1], numpix[1] + 1) * pixsize[1]
         sigma = lattice_full_width / np.sqrt(2 * np.log(2)) / fill_factor
-        envelope = np.tile(np.exp(-2 * (z / sigma)**2), (A[1], 1))
+        envelope = np.tile(np.exp(-2 * (z / sigma) ** 2), (A[1], 1))
         RealE = RealE * envelope.T
-    elif bound == 'none':
-        pass
-    else:
-        raise ValueError('bounding function value {} not one of \{step, gauss, none}', bound)
+    elif bound != "none":
+        raise ValueError(
+            f"bounding function value {bound} not one of {'step', 'gauss', 'none'}"
+        )
 
     # now rotate the E field as needed to get the pattern in the same plane as the detection objective:
     RotatedRealE = interpolation.rotate(RealE, -np.rad2deg(tilt), reshape=False)
@@ -533,13 +601,23 @@ def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
     if outdir is not None:
         outdir = os.path.abspath(os.path.expanduser(outdir))
         if os.path.isdir(outdir):
-            namefmt = '{:.0f}_{}Hex_c{:.2f}_na{:.0f}-{:.0f}_naIdeal{:.0f}_y{:02f}_t{:0.3f}'
-            name = namefmt.format(wave*1000, bound, crop, 100*NA_outer, 100*NA_inner,
-                100*NA_ideal, shift_y, tilt)
-            name = name.replace('.', 'p')
-            outpath = os.path.join(outdir, name + '.png')
-            imout = Image.fromarray(SLMPattern.astype(np.uint8)*255)
-            imout = imout.convert('1')
+            namefmt = (
+                "{:.0f}_{}Hex_c{:.2f}_na{:.0f}-{:.0f}_naIdeal{:.0f}_y{:02f}_t{:0.3f}"
+            )
+            name = namefmt.format(
+                wave * 1000,
+                bound,
+                crop,
+                100 * NA_outer,
+                100 * NA_inner,
+                100 * NA_ideal,
+                shift_y,
+                tilt,
+            )
+            name = name.replace(".", "p")
+            outpath = os.path.join(outdir, name + ".png")
+            imout = Image.fromarray(SLMPattern.astype(np.uint8) * 255)
+            imout = imout.convert("1")
             imout.save(outpath)
 
     if pattern_only:
@@ -557,20 +635,28 @@ def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
     ESLM = np.exp(1j * BinaryEPhase)
     # restrict the field to a square for simplicity of code:
     midpix = int(ESLM.shape[1] / 2)
-    ESLM = ESLM[:, midpix-int(ESLM.shape[0]/2):midpix+int(ESLM.shape[0]/2)+1]
-    EMask = fftshift(fft2(ifftshift(ESLM)))  # complex electric field impinging on the annular mask
+    ESLM = ESLM[
+        :, midpix - int(ESLM.shape[0] / 2) : midpix + int(ESLM.shape[0] / 2) + 1
+    ]
+    EMask = fftshift(
+        fft2(ifftshift(ESLM))
+    )  # complex electric field impinging on the annular mask
 
     # plot the intensity impinging on the annular mask:
-    MaskIntensity_impinging = np.real(EMask * np.conj(EMask))  # intensity impinging on the annular mask
+    MaskIntensity_impinging = np.real(
+        EMask * np.conj(EMask)
+    )  # intensity impinging on the annular mask
 
     # calc and plot the function for the filtering provided by the annular mask:
     B = MaskIntensity_impinging.shape
-    halfpix = int(np.floor(B[0]/2))
+    halfpix = int(np.floor(B[0] / 2))
     x = np.arange(-halfpix, halfpix + 1)
-    x = x / halfpix / (2 * pixsize[0])   # match the spectral range of the electric field at the annular mask
+    x = (
+        x / halfpix / (2 * pixsize[0])
+    )  # match the spectral range of the electric field at the annular mask
     y = x
     [X, Y] = np.meshgrid(x, y)
-    R = np.sqrt(X*X + Y*Y)
+    R = np.sqrt(X * X + Y * Y)
     MaxRad = NA_outer / index  # maximum annulus diameter
     MinRad = NA_inner / index  # minimum annulus diameter
     AnnularFilter = (R <= MaxRad) & (R >= MinRad)
@@ -585,19 +671,3 @@ def hex_lattice(wave=0.488, pixel=13.665, mag=167.364,
     SampleIntensity = np.real(ESample * np.conj(ESample))
 
     return SLMPattern, SampleIntensity, MaskIntensity
-
-
-if __name__ == '__main__':
-    import time
-    # now = time.time()
-    # a = linear_bessel_array(0.488, n_beam='fill', show=False, outdir='~/Desktop')
-    # print("Time: {}".format(time.time()-now))
-
-    now = time.time()
-    a, b, c = linear_bessel_array(0.488, n_beam='fill', show=True, pattern_only=False)
-    print("Time: {}".format(time.time()-now))
-
-    # plt.figure()
-    # plt.imshow(a, interpolation='nearest', cmap='gray')
-    # plt.title('Binarized image to output to SLM')
-    # plt.show()
