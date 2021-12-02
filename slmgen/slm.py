@@ -1,12 +1,19 @@
-from __future__ import division
-import numpy as np
 import os
 import sys
+
+import numpy as np
+from numpy.fft import fft2, fftshift, ifftshift
 from PIL import Image
-from numpy.fft import fft2, ifftshift, fftshift
 from scipy.interpolate import RectBivariateSpline, RegularGridInterpolator
 from scipy.ndimage import interpolation
-from numba import jit
+
+try:
+    from numba import jit
+except ImportError:
+
+    def jit(f, **_):
+        return f
+
 
 # fmt: off
 wavesets = {
@@ -236,19 +243,10 @@ def linear_bessel_array(
 
     f = kx * spacing * np.cos(tilt) + ky * spacing * np.sin(tilt)
 
-    if getattr(sys, "frozen", False):
-
-        @jit(nopython=True)
-        def calc(v, ii):
-            A = np.exp(1j * f * ii) + np.exp(-1j * f * ii)
-            return v + np.multiply(pupil_mask, A)
-
-    else:
-
-        @jit(nopython=True)
-        def calc(v, ii):
-            A = np.exp(1j * f * ii) + np.exp(-1j * f * ii)
-            return v + np.multiply(pupil_mask, A)
+    @jit(nopython=True)
+    def calc(v, ii):
+        A = np.exp(1j * f * ii) + np.exp(-1j * f * ii)
+        return v + np.multiply(pupil_mask, A)
 
     for ii in range(1, n_beam):
         # A = np.exp(1j * f * ii)
